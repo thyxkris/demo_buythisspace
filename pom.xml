@@ -57,8 +57,8 @@
         <first.run.directory>target/cucumber-parallel/</first.run.directory>
         <htmlReportDir></htmlReportDir>
         <download.folder></download.folder>
-        <default.password>Liuyang1.</default.password>
-        <default.username>krisphone@msn.com</default.username>
+        <default.password></default.password>
+        <default.username></default.username>
         <target.number>10</target.number>
 
 
