@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.thyxkris</groupId>
-    <artifactId>buyThisSpace</artifactId>
+    <artifactId>tinder</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -15,10 +15,10 @@
         <test.api.port>8080</test.api.port>
         <test.api.debug>false</test.api.debug>
         <failsafe.rerunFailingTestsCount>0</failsafe.rerunFailingTestsCount>
-        <selenium.grid.url></selenium.grid.url>
+        <selenium.grid.url>http://192.168.99.100:44445/wd/hub</selenium.grid.url>
         <browser.type>chrome</browser.type>
         <pageload.wait.time>200</pageload.wait.time>
-        <element.wait.time>15</element.wait.time>
+        <element.wait.time>5</element.wait.time>
         <implicit.wait.time>5000</implicit.wait.time>
         <execution.env>stg-secure</execution.env>
         <attempts.times>10</attempts.times>
@@ -39,15 +39,15 @@
         <browserstack.browserstack.appium_version></browserstack.browserstack.appium_version>
         <browserstack.deviceOrientation></browserstack.deviceOrientation>
         <browserstack.url></browserstack.url>
-        <window.resolution></window.resolution>
-        <starting.url>http://buythisspace.com.au/</starting.url>
+        <window.resolution>700x1500</window.resolution>
+        <starting.url>https://tinder.com/app/recs/profile</starting.url>
         <force.mobile.mode>false</force.mobile.mode>
         <parallel.files>**/*IT.class</parallel.files>
         <perCoreThreadCount>false</perCoreThreadCount>
         <useUnlimitedThreads>false</useUnlimitedThreads>
-        <forkCount>10</forkCount>
-        <threadCount>1</threadCount>
-        <parallel>all</parallel>
+        <forkCount>1</forkCount>
+        <threadCount>2</threadCount>
+        <parallel>classes</parallel>
         <featuresDirectory></featuresDirectory>
         <rerunOutputDirectory>target/rerun</rerunOutputDirectory>
         <chrome.headless>false</chrome.headless>
@@ -57,6 +57,9 @@
         <first.run.directory>target/cucumber-parallel/</first.run.directory>
         <htmlReportDir></htmlReportDir>
         <download.folder></download.folder>
+        <default.password>Liuyang1.</default.password>
+        <default.username>krisphone@msn.com</default.username>
+        <target.number>10</target.number>
 
 
     </properties>
@@ -102,7 +105,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>3.4.0</version>
+            <version>3.5.3</version>
         </dependency>
 
         <dependency>
@@ -231,6 +234,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <argLine>-Xmx2048m</argLine>
                     <testFailureIgnore>true</testFailureIgnore>
                     <perCoreThreadCount>${perCoreThreadCount}</perCoreThreadCount>
                     <useUnlimitedThreads>${useUnlimitedThreads}</useUnlimitedThreads>
@@ -239,8 +243,8 @@
                     <parallel>${parallel}</parallel>
                     <reuseForks>true</reuseForks>
 
-                    <parallelTestsTimeoutForcedInSeconds>1500</parallelTestsTimeoutForcedInSeconds>
-                    <parallelTestsTimeoutInSeconds>1500</parallelTestsTimeoutInSeconds>
+                    <parallelTestsTimeoutForcedInSeconds></parallelTestsTimeoutForcedInSeconds>
+                    <parallelTestsTimeoutInSeconds></parallelTestsTimeoutInSeconds>
 
                     <includes>
                         <include>${parallel.files}</include>

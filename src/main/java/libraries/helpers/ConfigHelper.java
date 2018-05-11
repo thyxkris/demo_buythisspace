@@ -10,4 +10,16 @@ public class ConfigHelper extends helpers.ConfigHelper {
     public static String getStartingURL() {
         return getString("starting.url");
     }
+
+    public static String getDefaultUserName() {
+        return  getString("default.username");
+    }
+
+    public static String getDefaultPass() {
+        return  getString("default.password");
+    }
+
+    public static int getTargetNumber() {
+        return getInt("target.number");
+    }
 }

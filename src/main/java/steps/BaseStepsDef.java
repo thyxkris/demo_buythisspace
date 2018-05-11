@@ -8,11 +8,7 @@ import libraries.helpers.TestConstantData;
 import libraries.infrastructure.ScenarioContext;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.*;
 
 import java.awt.*;
@@ -27,9 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 
 /**
  * Created by makri on 18/05/2017.
@@ -39,9 +32,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public abstract class BaseStepsDef {
 
     //declare page models, everytime when adding a new page, must declare it here
-    protected  SearchPageModel searchPageModel;
-    protected WhyOutdoorsPageModel whyOutdoorsPageModel;
+
+    protected TinderPageModel tinderPageModel;
     protected ContactPageModel contactPageModel;
+    protected SignInPageModel signInPageModel;
 
 
 
@@ -54,11 +48,11 @@ public abstract class BaseStepsDef {
         logger = scenarioContext.getLogger();
         logger.info(registerClass(this.getClass().getName()));
 
-        logger.info("BaseStepsDef/registerClass " + this.getClass() + "end setup ");
+        logger.info("BaseStepsDef/registerClass " + this.getClass() + " end setup ");
     }
 
     public <T extends BaseModel> BaseModel registerClass(String T) throws Exception {
-        logger.info("registerClass; " + this.getClass() + "start setup ");
+        logger.info("registerClass; " + this.getClass() + " start setup ");
 
 
         if (T.equals("steps.CommonStepsDef")) {
@@ -91,13 +85,6 @@ public abstract class BaseStepsDef {
         scenarioContext.getWebDriver().setBrowserResolution(width, height);
     }
 
-    public String takeScreenShot() throws IOException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        Date date = new Date();
-        String ScreenshotPath = dateFormat.format(date) + ".png";
-        return scenarioContext.getWebDriver().takeScreenShot(new File(ConfigHelper.getTestResourcesFolderPath()) + ScreenshotPath);
-    }
-
 
     //below is project-related,
     public void setup(Scenario scenario) throws IOException {
@@ -112,17 +99,17 @@ public abstract class BaseStepsDef {
         scenarioContext.setWebDriver(new KWebDriver(DriversFactory.getDriver()));
         scenarioContext.getWebDriver().setLogger(logger);
         outputConfigInfo();
-
+        //takeScreenshotInReportsAndSaveOnDisk();
         launchSearchPage();
-        FluentWait fluentWait = new FluentWait(  scenarioContext.getWebDriver()).withTimeout(ConfigHelper.getPageLoadWaitTime(), SECONDS).pollingEvery(50, MILLISECONDS);
-        try {
-            fluentWait.until(ExpectedConditions.alertIsPresent());
-            scenarioContext.getWebDriver().switchTo().alert().accept();
-        } catch (org.openqa.selenium.TimeoutException e) {
-            scenarioContext.getScenario().write(e.toString() + " alert Is not Present ");
-        }
+//        FluentWait fluentWait = new FluentWait(  scenarioContext.getWebDriver()).withTimeout(ConfigHelper.getPageLoadWaitTime(), SECONDS).pollingEvery(50, MILLISECONDS);
+//        try {
+//            fluentWait.until(ExpectedConditions.alertIsPresent());
+//            scenarioContext.getWebDriver().switchTo().alert().accept();
+//        } catch (org.openqa.selenium.TimeoutException e) {
+//            scenarioContext.getScenario().write(e.toString() + " alert Is not Present ");
+//        }
 
-        scenarioContext.getWebDriver().manage().deleteAllCookies();
+        //scenarioContext.getWebDriver().manage().deleteAllCookies();
     }
 
     public String getScenarioId() {
@@ -138,20 +125,20 @@ public abstract class BaseStepsDef {
 
         org.openqa.selenium.Dimension resolution = null;
         try {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            resolution = new org.openqa.selenium.Dimension((int) screenSize.getWidth(), (int) screenSize.getHeight());
-            logger.info("resolution is set W: " + (int) screenSize.getWidth() + " H: " + (int) screenSize.getHeight());
-        } catch (HeadlessException e) {
-            logger.info(e.toString());
-            try {
+            if( ConfigHelper.getString("window.resolution") != null && !ConfigHelper.getString("window.resolution").isEmpty()) {
                 String[] res = ConfigHelper.getString("window.resolution").toLowerCase().split("x");
                 logger.info("resolution is set W: " + Integer.valueOf(res[0]) + " H: " + Integer.valueOf(res[1]));
                 resolution = new org.openqa.selenium.Dimension(Integer.valueOf(res[0]), Integer.valueOf(res[1]));
-            } catch (Exception e1) {
-
-                logger.info(e1.toString());
-                resolution = new org.openqa.selenium.Dimension(1024, 768);
+                scenarioContext.getWebDriver().manage().window().setSize(resolution);
+            }else
+            {
+                //do nothing
             }
+        } catch (Exception e1) {
+
+            logger.info(e1.toString());
+            //resolution = new org.openqa.selenium.Dimension(1024, 768);
+
         }
         return resolution;
     }
