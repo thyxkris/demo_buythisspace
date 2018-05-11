@@ -119,7 +119,7 @@ public abstract class BaseStepsDef {
             fluentWait.until(ExpectedConditions.alertIsPresent());
             scenarioContext.getWebDriver().switchTo().alert().accept();
         } catch (org.openqa.selenium.TimeoutException e) {
-            scenarioContext.getScenario().write(e.toString() + " alert Is not Present ");
+           // scenarioContext.getScenario().write(e.toString() + " alert Is not Present ");
         }
 
         scenarioContext.getWebDriver().manage().deleteAllCookies();
