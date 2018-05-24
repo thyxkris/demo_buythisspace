@@ -15,16 +15,8 @@ public class SignInPageStepsDef extends BaseStepsDef {
     }
 
     @Override
-    public void IShouldBeOnThePage() throws Throwable {
-
-    }
-
-
-
-
-
     @Then("^I should be on the sign in page$")
-    public void iShouldBeOnTheSearchPage() throws Throwable {
+    public void IShouldBeOnThePage() throws Throwable {
         IShouldBeOnThePage();
     }
 

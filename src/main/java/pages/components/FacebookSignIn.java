@@ -23,6 +23,7 @@ public class FacebookSignIn extends BaseModel {
     By PASS = By.cssSelector("#pass");
     By LOGIN = By.name("login");
     public void SignInWithDefaultUserPass() throws Exception {
+        logger.info(" SignInWithDefaultUserPass");
         Set<String> windowHandles = driver.getWindowHandles();
         KWebElement kWebElement_email = driver.findKElement(EMAIL);
         KWebElement kWebElement_pass = driver.findKElement(PASS);

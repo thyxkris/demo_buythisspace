@@ -2,7 +2,7 @@
 Feature: check all the links in the header work fine1
 
   @id_check_links1
-  Scenario: click all the links in the header jump to the correct url and pages1
+  Scenario: click all the links in the header jump to the correct url and pages
 
     Given I sign in with facebook account
     Then I click like button on tinder

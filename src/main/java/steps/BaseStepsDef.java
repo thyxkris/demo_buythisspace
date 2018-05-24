@@ -38,10 +38,10 @@ public abstract class BaseStepsDef {
     protected SignInPageModel signInPageModel;
 
 
-
     //below no need to modify
     protected Logger logger;
     protected ScenarioContext scenarioContext;
+
     //here is generic, should be put into another super: BaseStep
     public BaseStepsDef(ScenarioContext scenarioContext) throws Throwable {
         this.scenarioContext = scenarioContext;
@@ -101,14 +101,6 @@ public abstract class BaseStepsDef {
         outputConfigInfo();
         //takeScreenshotInReportsAndSaveOnDisk();
         launchSearchPage();
-//        FluentWait fluentWait = new FluentWait(  scenarioContext.getWebDriver()).withTimeout(ConfigHelper.getPageLoadWaitTime(), SECONDS).pollingEvery(50, MILLISECONDS);
-//        try {
-//            fluentWait.until(ExpectedConditions.alertIsPresent());
-//            scenarioContext.getWebDriver().switchTo().alert().accept();
-//        } catch (org.openqa.selenium.TimeoutException e) {
-//            scenarioContext.getScenario().write(e.toString() + " alert Is not Present ");
-//        }
-
         //scenarioContext.getWebDriver().manage().deleteAllCookies();
     }
 
@@ -125,20 +117,16 @@ public abstract class BaseStepsDef {
 
         org.openqa.selenium.Dimension resolution = null;
         try {
-            if( ConfigHelper.getString("window.resolution") != null && !ConfigHelper.getString("window.resolution").isEmpty()) {
+            if (ConfigHelper.getString("window.resolution") != null && !ConfigHelper.getString("window.resolution").isEmpty()) {
                 String[] res = ConfigHelper.getString("window.resolution").toLowerCase().split("x");
                 logger.info("resolution is set W: " + Integer.valueOf(res[0]) + " H: " + Integer.valueOf(res[1]));
                 resolution = new org.openqa.selenium.Dimension(Integer.valueOf(res[0]), Integer.valueOf(res[1]));
                 scenarioContext.getWebDriver().manage().window().setSize(resolution);
-            }else
-            {
+            } else {
                 //do nothing
             }
         } catch (Exception e1) {
-
             logger.info(e1.toString());
-            //resolution = new org.openqa.selenium.Dimension(1024, 768);
-
         }
         return resolution;
     }
@@ -172,7 +160,6 @@ public abstract class BaseStepsDef {
         scenarioContext.getWebDriver().navigate().to(url);
         scenarioContext.getWebDriver().manage().timeouts().implicitlyWait(TestConstantData.NORMAL_WAIT_INTERNAL, TimeUnit.MILLISECONDS);
     }
-
 
 
     public void tearUp() throws IOException {
@@ -358,9 +345,7 @@ public abstract class BaseStepsDef {
     void takeScreenshotInReportsAndSaveOnDisk() throws IOException {
 
         try {
-            final byte[] foto = scenarioContext.getWebDriver().getScreenshotAs(OutputType.BYTES);
-            //  scenarioContext.getScenario().write(takeScreenShot());
-            scenarioContext.getScenario().embed(foto, "image/png");
+            getCurrentPage().takeScreenShot(true);
         } catch (Exception e) {
             scenarioContext.getScenario().write(" take screen shot fails due to " + e.toString());
         }

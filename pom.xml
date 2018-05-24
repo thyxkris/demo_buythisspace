@@ -15,7 +15,7 @@
         <test.api.port>8080</test.api.port>
         <test.api.debug>false</test.api.debug>
         <failsafe.rerunFailingTestsCount>0</failsafe.rerunFailingTestsCount>
-        <selenium.grid.url>http://192.168.99.100:44445/wd/hub</selenium.grid.url>
+        <selenium.grid.url></selenium.grid.url>
         <browser.type>chrome</browser.type>
         <pageload.wait.time>200</pageload.wait.time>
         <element.wait.time>5</element.wait.time>
@@ -39,7 +39,7 @@
         <browserstack.browserstack.appium_version></browserstack.browserstack.appium_version>
         <browserstack.deviceOrientation></browserstack.deviceOrientation>
         <browserstack.url></browserstack.url>
-        <window.resolution>700x1500</window.resolution>
+        <window.resolution>700x2200</window.resolution>
         <starting.url>https://tinder.com/app/recs/profile</starting.url>
         <force.mobile.mode>false</force.mobile.mode>
         <parallel.files>**/*IT.class</parallel.files>

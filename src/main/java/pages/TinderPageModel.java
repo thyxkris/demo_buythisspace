@@ -37,7 +37,6 @@ public class TinderPageModel extends BasePageModel {
     private final By REC_BEFORE_MORE_INFO_SCREENSHOT = By.cssSelector("div[class^='recsCardboard W']");
     private final By REC_MORE_INFO_SCREENSHOT = By.cssSelector("div[class^='profileCard__card']");
 
-    //profileCard__header__info W(100%)
     private void findButtonsForClick() {
         if (this.hashMapButtons != null) {
             hashMapButtons.clear();
@@ -56,13 +55,7 @@ public class TinderPageModel extends BasePageModel {
             }
             driver.waitForElementClickable(hashMapButtons.get("like"));
         } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ei) {
-                // Restore the interrupted status
-                logger.info(ei.getMessage());
-                Thread.currentThread().interrupt();
-            }
+            sleep(1000);
             takeScreenShot();
             findButtonsForClick();
         }
@@ -74,22 +67,15 @@ public class TinderPageModel extends BasePageModel {
 
         try {
             while (driver.findElements(BTN_TO_SEE_MORE_INFO).size() < 2) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ei) {
-                    // Restore the interrupted status
-                    logger.info("clickToSeeMoreInfo() -- " + ei.getStackTrace());
-                    Thread.currentThread().interrupt();
-                }
+                sleep(1000);
                 if (driver.findElements(By.xpath("//span[starts-with(text(),'Report')]")).size() > 0) {
                     logger.info("clickToSeeMoreInfo() finished");
                     return;
                 }
-
             }
-            logger.info("clickToSeeMoreInfo() clicking");
+    //        logger.info("clickToSeeMoreInfo() clicking");
             driver.clickButton(driver.findElement(REC_BEFORE_MORE_INFO_SCREENSHOT).findElement(BTN_TO_SEE_MORE_INFO));//.c
-            logger.info("clickToSeeMoreInfo() clicked");
+  //          logger.info("clickToSeeMoreInfo() clicked");
 
             if (!driver.waitForElementVisible(By.xpath("//span[starts-with(text(),'Report')]"))) {
                 //if the page doesn't change, click again
@@ -98,38 +84,20 @@ public class TinderPageModel extends BasePageModel {
             logger.info("clickToSeeMoreInfo() finished");
             return;
         } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ei) {
-                // Restore the interrupted status
-                logger.info(ei.getMessage());
-                Thread.currentThread().interrupt();
-            }
-            logger.info("clickToSeeMoreInfo() -- " + e.getStackTrace());
+            sleep(1000);
+            logger.info(e.getMessage() + ' ' + e.getStackTrace());
             takeScreenShot();
             clickToSeeMoreInfo();
         } catch (java.lang.IndexOutOfBoundsException e) {
             //it means this is no data coming back
-            logger.info(e.getMessage());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ei) {
-                // Restore the interrupted status
-                logger.info(ei.getMessage());
-                Thread.currentThread().interrupt();
-            }
+            logger.info(e.getMessage() + ' ' + e.getStackTrace());
+            sleep(1000);
             //takeScreenShot();
             clickToSeeMoreInfo();
         } catch (Exception e) {
             //it means this is no data coming back
-            logger.info(e.getMessage());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ei) {
-                // Restore the interrupted status
-                logger.info(ei.getMessage());
-                Thread.currentThread().interrupt();
-            }
+            logger.info(e.getMessage() + ' ' + e.getStackTrace());
+            sleep(1000);
             //takeScreenShot();
             clickToSeeMoreInfo();
         }
@@ -140,13 +108,7 @@ public class TinderPageModel extends BasePageModel {
             findButtonsForClick();
             driver.clickButton(hashMapButtons.get(button));
         } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ei) {
-                // Restore the interrupted status
-                logger.info(ei.getMessage());
-                Thread.currentThread().interrupt();
-            }
+            sleep(1000);
             takeScreenShot();
             findButtonsForClick();
             driver.clickButton(hashMapButtons.get(button));
@@ -155,17 +117,11 @@ public class TinderPageModel extends BasePageModel {
 
     public void scrollWindowToBottom() throws InterruptedException {
         try {
-            logger.info("scrollWindowToBottom() scrolling");
+//            logger.info("scrollWindowToBottom() scrolling");
             driver.scrollViewToWebElement(By.xpath("//span[starts-with(text(),'Report')]"));
-            logger.info("scrollWindowToBottom() scrolled");
+//            logger.info("scrollWindowToBottom() scrolled");
         } catch (org.openqa.selenium.StaleElementReferenceException e) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ei) {
-                // Restore the interrupted status
-                logger.info(ei.getMessage());
-                Thread.currentThread().interrupt();
-            }
+            sleep(1000);
             takeScreenShot();
             driver.scrollViewToWebElement(By.xpath("//span[starts-with(text(),'Report')]"));
         } catch (NoSuchElementException nsee) {
@@ -185,42 +141,26 @@ public class TinderPageModel extends BasePageModel {
         //wait till the page loaded completely
         logger.info("it seems no data yet, wait ....");
         while (driver.findElements(BTN_TO_SEE_MORE_INFO).size() < 2) {
-            try {
-                Thread.sleep(1000);
-
-            } catch (InterruptedException e) {
-                // Restore the interrupted status
-                Thread.currentThread().interrupt();
-            }
-
+            sleep(1000);
         }
-        //||driver.waitForElementInvisible(REC_MORE_INFO_SCREENSHOT)
     }
 
     public void clikeLikeButton() throws InterruptedException {
 
-
         waitTillPageLoad();
-        //take screenshot
-
         driver.waitForElementVisible(REC_BEFORE_MORE_INFO_SCREENSHOT);
         while (this.hashMapButtons.size() < 5) {
             findButtonsForClick();
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                // Restore the interrupted status
-                Thread.currentThread().interrupt();
-            }
+            sleep(10);
         }
-
-        // logger.info(takeScreenShot(true, driver.findKElement(REC_BEFORE_MORE_INFO_SCREENSHOT),deviationX,deviationY, 0.6));
 
         //to see more info
         clickToSeeMoreInfo();
         String name_age = "";
         try {
-            name_age = driver.findElement(By.cssSelector("div[class^='profileCard__header__info']")).getText().split("\\n")[0];
+            String info = driver.findElement(By.cssSelector("div[class^='profileCard__header__info']")).getText();
+            name_age = info.split("\\n")[0];
+            logger.info("name age info " + info);
         } catch (Exception e) {
             logger.info("failed in getting her name and age");
             logger.info(e.getMessage() + e.getStackTrace());
@@ -246,42 +186,70 @@ public class TinderPageModel extends BasePageModel {
                 logger.info("failed in swiping fotos");
                 logger.info(e.getMessage() + e.getStackTrace());
             }
-        } else {
+        } else {//getWidth() <= 782
+
             logger.info(takeScreenShot(true, false, null, 0, 0, 0.7, name_age));
+            int size = driver.findElements(By.cssSelector("div[class^='Pos(r)")).get(0).findElements(By.cssSelector("div[class^='bullet ']")).size();
+            if (size > 1) {
+                Actions action = new Actions(driver);
+                for (int i = 1; i < size-1; i++) {
+                    try {
+                        action.moveToElement(driver.findElements(By.cssSelector("div[class^='Pos(r)")).get(0).findElements(By.cssSelector("div[class^='bullet ']")).get(size - 1)).click().click();
+                        action.build().perform();
+                        logger.info(takeScreenShot(true, false, null, 0, 0, 0.7, name_age));
+                    }catch(java.lang.IndexOutOfBoundsException e)
+                    {
+                        logger.info("size " + driver.findElements(By.cssSelector("div[class^='Pos(r)")).get(0).findElements(By.cssSelector("div[class^='bullet ']")).size());
+                        logger.info(" index "+ String.valueOf(size -1));
+                    }
+                }
+            }
 
         }
-        Actions action = new Actions(driver);
-        new Actions(driver).moveByOffset(100, 300).doubleClick().perform();
-
         //scroll to the bottom
+       // logger.info(name_age + ' ' + driver.findKElement(By.cssSelector("div[class^='Px")).getText());
         scrollWindowToBottom();
 
         //take screenshot
         driver.waitForElementVisible(REC_MORE_INFO_SCREENSHOT);
         String instagram_account = "";
-        if (driver.findElements(By.cssSelector("div[class^='Pos(r)")).size() > 1) {
-            //it has instagram
+
+
+        if (driver.findKElements(By.cssSelector("div[class^='Px")).size() > 0) {
+
+            //it has more info
             //click the last button to see the link of instagram
+            boolean hasInstagram = false;
             try {
                 String instagram = "";
-                int size = driver.findElements(By.cssSelector("div[class^='Pos(r)")).get(1).findElements(By.cssSelector("div[class^='bullet ']")).size();
-                if (size == 0) {
-                    // the link on the first page
 
-                } else {
-                    driver.clickButton(driver.findElements(By.cssSelector("div[class^='Pos(r)")).get(1).findElements(By.cssSelector("div[class^='bullet ']")).get(size - 1));
-                }
-                int size_a= driver.findElements(By.xpath("//a")).size();
-                instagram = driver.findElements(By.xpath("//a")).get(size_a-1).getAttribute("href");
-                instagram_account = instagram.replace("https://www.instagram.com/", "ins-");
-                if(instagram_account.contains("inder"))
-                {
-                    for(KWebElement kWebElement: driver.findKElements(By.xpath("//a")))
-                    {
-                        logger.info("kWebElement.getAttribute(\"href\") "+kWebElement.getAttribute("href"));
+                //int size_medium= driver.findElements(By.cssSelector("div[class^='Fw")).size();
+                for (KWebElement kWebElement : driver.findKElements(By.cssSelector("div[class^='Px"))) {
+                    logger.info(name_age + ' ' + kWebElement.getText());
+                    if (kWebElement.getText().contains("Instagram Photos")) {
+                        hasInstagram=true;
+                        int size = kWebElement.findKElements(By.cssSelector("div[class^='bullet ']")).size();
+                        if (size == 0) {
+                            // the link on the first page
+
+                        } else {
+                            driver.clickButton(kWebElement.findKElements(By.cssSelector("div[class^='bullet ']")).get(size - 1));
+                        }
                     }
-                    logger.info("instagram_account : "+instagram_account);
-                    instagram_account="";
+                }
+                // int size = driver.findElements(By.cssSelector("div[class^='Pos(r)")).get(1).findElements(By.cssSelector("div[class^='bullet ']")).size();
+                if(hasInstagram){
+                int size_a = driver.findElements(By.xpath("//a")).size();
+                instagram = driver.findElements(By.xpath("//a")).get(size_a - 1).getAttribute("href");
+                instagram_account = instagram.replace("https://www.instagram.com/", "ins-");
+                logger.info("instagram: " + instagram);
+                if (instagram_account.contains("https://tinder.com/app/recs")) {
+                    for (KWebElement kWebElement : driver.findKElements(By.xpath("//a"))) {
+                        logger.info("kWebElement.getAttribute(\"href\") " + kWebElement.getAttribute("href"));
+                    }
+                    logger.info("instagram_account : " + instagram_account);
+                    instagram_account = "";
+                }
                 }
             } catch (Exception e) {
                 logger.info(name_age + " fails in getting instagram info though it seems she has one");
@@ -292,7 +260,7 @@ public class TinderPageModel extends BasePageModel {
             int deviationX = driver.findKElement(NAVIBAR).getSize().getWidth();
             int deviationY = driver.findKElement(NAVIBAR).getSize().getHeight();
             logger.info(takeScreenShot(true, false, driver.findKElement(REC_MORE_INFO_SCREENSHOT), deviationX, deviationY, 0.7, name_age + instagram_account));
-        } else {
+        } else {////getWidth() <= 782
             logger.info(takeScreenShot(true, false, null, 0, 0, 0.7, name_age + instagram_account));
 
         }
